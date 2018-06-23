@@ -1,0 +1,32 @@
+<div class="col col-md-6">
+	<p class="note">Select a file you would like to download on test startup.  Files will be downloaded to <code>~/downloads/</code> on the load agents.</p>
+	<div class="form-group">
+		<label>File to Download to Load Agents</label>
+		<input type="url" class="form-control" name="gatlingfiledownload_filename" />
+	</div>
+	<div class="form-group">
+		<label class="checkbox-inline">
+			<input type="checkbox" name="gatlingfiledownload_tar_extract" value="T" />
+			Extract File as TAR/TGZ
+		</label>
+	</div>
+</div>
+
+<script type="text/javascript">
+$(function(){
+	var eventHandler = function(event, data) {
+		switch (event)
+		{
+			case 'prefill':
+				if ("plugin_gatlingfiledownload" in data)
+				{
+					var pData = data.plugin_gatlingfiledownload;
+					if (("gatlingfiledownload_tar_extract" in pData) && pData.gatlingfiledownload_tar_extract == "T")
+						$("input[name='gatlingfiledownload_tar_extract']").prop("checked", true);
+				}
+				break;
+		}
+	};
+	GatlingTest.registerPlugin('gatlingfiledownload', eventHandler);
+});
+</script>
