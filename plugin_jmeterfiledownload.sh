@@ -11,18 +11,21 @@ function plugin_install()
 		# Set up directory
 		cd "${userHome}"
 		if [ ! -d downloads ]; then
-			mkdir downloads
-			chown "${user}:${user}" downloads
+			sudo mkdir downloads
+			sudo chown "${user}:$(whoami)" downloads
+			sudo chmod g+rwx downloads
 		fi
 		cd downloads
 		# Download
 		rl_logger "Downloading ${url}"
 		file=$(basename "${url}")
 		curl "${url}" > "${file}"
-		chown "${user}:${user}" "${file}"
 		if [ $? -ne 0 ]; then
 			rl_logger "Failed to download ${url}"
 		else
+			# Change owner
+			sudo chown "${user}:${user}" "${file}"
+
 			# Extra file if desired
 			tarExtract=$(plugin_setting jmeterfiledownload_tar_extract)
 			if [ "${tarExtract}" = "T" ]; then
